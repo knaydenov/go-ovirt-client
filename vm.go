@@ -1082,6 +1082,7 @@ func (v *vmCPUTopoParams) MustWithThreads(threads uint) BuildableVMCPUTopoParams
 type VMOSParameters interface {
 	// Type returns the type-string for the operating system.
 	Type() *string
+	CustomKernelCmdline() *string
 }
 
 // BuildableVMOSParameters is a buildable version of VMOSParameters.
@@ -1090,6 +1091,8 @@ type BuildableVMOSParameters interface {
 
 	WithType(t string) (BuildableVMOSParameters, error)
 	MustWithType(t string) BuildableVMOSParameters
+	WithCustomKernelCmdline(t string) (BuildableVMOSParameters, error)
+	MustWithCustomKernelCmdline(t string) BuildableVMOSParameters
 }
 
 // NewVMOSParameters creates a new VMOSParameters structure.
@@ -1098,7 +1101,8 @@ func NewVMOSParameters() BuildableVMOSParameters {
 }
 
 type vmOSParameters struct {
-	t *string
+	t                   *string
+	customKernelCmdline *string
 }
 
 func (v *vmOSParameters) Type() *string {
@@ -1112,6 +1116,23 @@ func (v *vmOSParameters) WithType(t string) (BuildableVMOSParameters, error) {
 
 func (v *vmOSParameters) MustWithType(t string) BuildableVMOSParameters {
 	builder, err := v.WithType(t)
+	if err != nil {
+		panic(err)
+	}
+	return builder
+}
+
+func (v *vmOSParameters) CustomKernelCmdline() *string {
+	return v.customKernelCmdline
+}
+
+func (v *vmOSParameters) WithCustomKernelCmdline(c string) (BuildableVMOSParameters, error) {
+	v.customKernelCmdline = &c
+	return v, nil
+}
+
+func (v *vmOSParameters) MustWithCustomKernelCmdline(c string) BuildableVMOSParameters {
+	builder, err := v.WithCustomKernelCmdline(c)
 	if err != nil {
 		panic(err)
 	}
