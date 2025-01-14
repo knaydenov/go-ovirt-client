@@ -8,3 +8,4 @@ require (
 	github.com/ovirt/go-ovirt-client-log/v3 v3.0.0
 	github.com/stretchr/testify v1.7.0 // indirect
 )
+
