@@ -1091,8 +1091,8 @@ type BuildableVMOSParameters interface {
 
 	WithType(t string) (BuildableVMOSParameters, error)
 	MustWithType(t string) BuildableVMOSParameters
-	WithCustomKernelCmdline(t string) (BuildableVMOSParameters, error)
-	MustWithCustomKernelCmdline(t string) BuildableVMOSParameters
+	WithCustomKernelCmdline(c string) (BuildableVMOSParameters, error)
+	MustWithCustomKernelCmdline(c string) BuildableVMOSParameters
 }
 
 // NewVMOSParameters creates a new VMOSParameters structure.
