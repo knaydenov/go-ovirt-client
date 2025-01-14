@@ -255,7 +255,7 @@ func vmOSCreator(params OptionalVMParameters, builder *ovirtsdk.VmBuilder) {
 		if t := os.Type(); t != nil {
 			osBuilder.Type(*t)
 		}
-		if t := os.Type(); t != nil {
+		if c := os.CustomKernelCmdline(); c != nil {
 			osBuilder.CustomKernelCmdline(*os.CustomKernelCmdline())
 		}
 		builder.OsBuilder(osBuilder)
