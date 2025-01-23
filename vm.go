@@ -374,6 +374,12 @@ type Initialization interface {
 	CustomScript() string
 	HostName() string
 	NicConfiguration() NicConfiguration
+	DnsSearch() string
+	DnsServers() string
+	CloudInitNetworkProtocol() string
+	UserName() string
+	AuthorizedSshKeys() string
+	RootPassword() string
 }
 
 // BuildableInitialization is a buildable version of Initialization.
@@ -382,6 +388,12 @@ type BuildableInitialization interface {
 	WithCustomScript(customScript string) BuildableInitialization
 	WithHostname(hostname string) BuildableInitialization
 	WithNicConfiguration(nic NicConfiguration) BuildableInitialization
+	WithDnsSearch(dnsSearch string) BuildableInitialization
+	WithDnsServers(dnsServers string) BuildableInitialization
+	WithCloudInitNetworkProtocol(cloudInitNetworkProtocol string) BuildableInitialization
+	WithUserName(userName string) BuildableInitialization
+	WithAuthorizedSshKeys(authorizedSshKeys string) BuildableInitialization
+	WithRootPassword(rootPassword string) BuildableInitialization
 }
 
 // initialization defines to the virtual machine’s initialization configuration.
@@ -389,17 +401,29 @@ type BuildableInitialization interface {
 // hostname - Hostname to be set to Virtual Machine when deployed.
 // nicConfiguration - Optional. The nic configuration used on boot time.
 type initialization struct {
-	customScript     string
-	hostname         string
-	nicConfiguration NicConfiguration
+	customScript             string
+	hostname                 string
+	nicConfiguration         NicConfiguration
+	dnsSearch                string
+	dnsServers               string
+	cloudInitNetworkProtocol string
+	userName                 string
+	authorizedSshKeys        string
+	rootPassword             string
 }
 
 // NewInitialization creates a new Initialization from the specified parameters.
 func NewInitialization(customScript, hostname string) BuildableInitialization {
 	return &initialization{
-		customScript:     customScript,
-		hostname:         hostname,
-		nicConfiguration: nil,
+		customScript:             customScript,
+		hostname:                 hostname,
+		nicConfiguration:         nil,
+		dnsSearch:                "",
+		dnsServers:               "",
+		cloudInitNetworkProtocol: "",
+		userName:                 "",
+		authorizedSshKeys:        "",
+		rootPassword:             "",
 	}
 }
 
@@ -415,6 +439,39 @@ func (i *initialization) NicConfiguration() NicConfiguration {
 	return i.nicConfiguration
 }
 
+func (i *initialization) DnsSearch() string {
+	return i.dnsSearch
+}
+func (i *initialization) DnsServers() string {
+	return i.dnsServers
+}
+
+func (i *initialization) UserName() string {
+	return i.userName
+}
+func (i *initialization) AuthorizedSshKeys() string {
+	return i.authorizedSshKeys
+}
+func (i *initialization) RootPassword() string {
+	return i.rootPassword
+}
+func (i *initialization) WithUserName(userName string) BuildableInitialization {
+	i.userName = userName
+	return i
+}
+func (i *initialization) WithAuthorizedSshKeys(authorizedSshKeys string) BuildableInitialization {
+	i.authorizedSshKeys = authorizedSshKeys
+	return i
+}
+func (i *initialization) WithRootPassword(rootPassword string) BuildableInitialization {
+	i.rootPassword = rootPassword
+	return i
+}
+
+func (i *initialization) CloudInitNetworkProtocol() string {
+	return i.cloudInitNetworkProtocol
+}
+
 func (i *initialization) WithCustomScript(customScript string) BuildableInitialization {
 	i.customScript = customScript
 	return i
@@ -427,6 +484,21 @@ func (i *initialization) WithHostname(hostname string) BuildableInitialization {
 
 func (i *initialization) WithNicConfiguration(nic NicConfiguration) BuildableInitialization {
 	i.nicConfiguration = nic
+	return i
+}
+
+func (i *initialization) WithDnsSearch(dnsSearch string) BuildableInitialization {
+	i.dnsSearch = dnsSearch
+	return i
+}
+
+func (i *initialization) WithDnsServers(dnsServers string) BuildableInitialization {
+	i.dnsServers = dnsServers
+	return i
+}
+
+func (i *initialization) WithCloudInitNetworkProtocol(cloudInitNetworkProtocol string) BuildableInitialization {
+	i.cloudInitNetworkProtocol = cloudInitNetworkProtocol
 	return i
 }
 
@@ -1194,7 +1266,7 @@ func (v *vmOSParameters) Kernel() *string {
 }
 
 func (v *vmOSParameters) WithKernel(k string) (BuildableVMOSParameters, error) {
-	v.initrd = &k
+	v.kernel = &k
 	return v, nil
 }
 
@@ -1211,7 +1283,7 @@ func (v *vmOSParameters) ReportedKernelCmdline() *string {
 }
 
 func (v *vmOSParameters) WithReportedKernelCmdline(r string) (BuildableVMOSParameters, error) {
-	v.initrd = &r
+	v.reportedKernelCmdline = &r
 	return v, nil
 }
 

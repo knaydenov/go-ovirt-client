@@ -78,6 +78,15 @@ func vmBuilderInitialization(params OptionalVMParameters, builder *ovirtsdk.VmBu
 	if init.HostName() != "" {
 		initBuilder.HostName(init.HostName())
 	}
+	if init.UserName() != "" {
+		initBuilder.UserName(init.UserName())
+	}
+	if init.RootPassword() != "" {
+		initBuilder.RootPassword(init.RootPassword())
+	}
+	if init.AuthorizedSshKeys() != "" {
+		initBuilder.AuthorizedSshKeys(init.AuthorizedSshKeys())
+	}
 	if nicConf := init.NicConfiguration(); nicConf != nil {
 
 		nicBuilder := ovirtsdk.NewNicConfigurationBuilder()
@@ -104,7 +113,22 @@ func vmBuilderInitialization(params OptionalVMParameters, builder *ovirtsdk.VmBu
 
 		initBuilder.NicConfigurationsOfAny(nicBuilder.MustBuild())
 	}
+
+	if init.DnsSearch() != "" {
+		initBuilder.DnsSearch(init.DnsSearch())
+
+	}
+
+	if init.DnsServers() != "" {
+		initBuilder.DnsServers(init.DnsServers())
+	}
+
+	if init.CloudInitNetworkProtocol() != "" {
+		initBuilder.CloudInitNetworkProtocol(ovirtsdk.CloudInitNetworkProtocol(init.CloudInitNetworkProtocol()))
+	}
+
 	builder.InitializationBuilder(initBuilder)
+
 }
 
 func vmPlacementPolicyParameterConverter(params OptionalVMParameters, builder *ovirtsdk.VmBuilder) {
@@ -255,9 +279,22 @@ func vmOSCreator(params OptionalVMParameters, builder *ovirtsdk.VmBuilder) {
 		if t := os.Type(); t != nil {
 			osBuilder.Type(*t)
 		}
-		if c := os.CustomKernelCmdline(); c != nil {
-			osBuilder.CustomKernelCmdline(*os.CustomKernelCmdline())
+		if cmdline := os.Cmdline(); cmdline != nil {
+			osBuilder.Cmdline(*cmdline)
 		}
+		if customKernelCmdline := os.CustomKernelCmdline(); customKernelCmdline != nil {
+			osBuilder.CustomKernelCmdline(*customKernelCmdline)
+		}
+		if initrd := os.Initrd(); initrd != nil {
+			osBuilder.Initrd(*initrd)
+		}
+		if kernel := os.Kernel(); kernel != nil {
+			osBuilder.Kernel(*kernel)
+		}
+		if reportedKernelCmdline := os.ReportedKernelCmdline(); reportedKernelCmdline != nil {
+			osBuilder.ReportedKernelCmdline(*reportedKernelCmdline)
+		}
+
 		builder.OsBuilder(osBuilder)
 	}
 }
