@@ -21,6 +21,10 @@ type StorageDomainClient interface {
 	// RemoveDiskFromStorageDomain removes a disk from a specific storage domain, but leaves the disk on other storage
 	// domains if any. If the disk is not present on any more storage domains, the entire disk will be removed.
 	RemoveDiskFromStorageDomain(id StorageDomainID, diskID DiskID, retries ...RetryStrategy) error
+	// MoveDiskToStorageDomain moves a disk from a specific storage domain to another, but leaves the disk on other storage
+	// domains if any.
+	MoveDiskToStorageDomain(diskID DiskID, storageDomainID StorageDomainID, retries ...RetryStrategy) (result Disk, err error)
+	StartMoveDiskToStorageDomain(diskID DiskID, storageDomainID StorageDomainID, retries ...RetryStrategy) (DiskUpdate, error)
 }
 
 // StorageDomainData is the core of StorageDomain, providing only data access functions.

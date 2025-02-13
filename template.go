@@ -28,6 +28,8 @@ type TemplateClient interface {
 	WaitForTemplateStatus(templateID TemplateID, status TemplateStatus, retries ...RetryStrategy) (Template, error)
 	// CopyTemplateDiskToStorageDomain copies template disk to the specified storage domain.
 	CopyTemplateDiskToStorageDomain(diskID DiskID, storageDomainID StorageDomainID, retries ...RetryStrategy) (Disk, error)
+	// StartCopyTemplateDiskToStorageDomain copies template disk to the specified storage domain.
+	StartCopyTemplateDiskToStorageDomain(diskID DiskID, storageDomainID StorageDomainID, retries ...RetryStrategy) (DiskUpdate, error)
 }
 
 // TemplateID is an identifier for a template. It has a special type so the compiler

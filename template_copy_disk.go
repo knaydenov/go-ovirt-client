@@ -66,6 +66,13 @@ func (o *oVirtClient) StartCopyTemplateDiskToStorageDomain(
 	}, nil
 }
 
+func (o *mockClient) StartCopyTemplateDiskToStorageDomain(
+	diskID DiskID,
+	storageDomainID StorageDomainID,
+	retries ...RetryStrategy) (DiskUpdate, error) {
+	panic("not implemented")
+}
+
 func (m *mockClient) CopyTemplateDiskToStorageDomain(
 	diskID DiskID,
 	storageDomainID StorageDomainID,
